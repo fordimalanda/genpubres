@@ -7,7 +7,6 @@ import {
   TrendingUp,
   Clock,
   Hash,
-  Sparkles,
   Layers,
 } from "@/components/ui/Icons";
 import { DeclineResult, PLATFORMS_DATA } from "@/types";
@@ -48,7 +47,7 @@ export default function PlatformAnalyticsChart({ result }: Props) {
 
     const sortedHashtags = Object.entries(hashtagMap)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 10);
+      .slice(0, 8);
 
     return {
       totalChars,
@@ -60,96 +59,82 @@ export default function PlatformAnalyticsChart({ result }: Props) {
   }, [platforms]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.1 }}
-      className="glass-panel rounded-2xl p-6 border border-slate-800 space-y-6"
-    >
+    <div className="ui-card rounded-xl p-5 space-y-5">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-            <BarChart3 className="w-5 h-5" />
+          <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300">
+            <BarChart3 size={16} />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-100 flex items-center gap-2">
-              Analyse & Métriques de Diffusion
-              <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                Optimisé IA
-              </span>
+            <h3 className="font-semibold text-sm text-slate-100 tracking-tight">
+              Analyse & Calibrage des formats
             </h3>
             <p className="text-xs text-slate-400">
-              Calibrage automatique des longueurs, du rythme de lecture et des hashtags
+              Contrôle des volumes de caractères et compatibilité avec les algorithmes
             </p>
           </div>
         </div>
 
-        {/* Global virality badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-700/80">
-          <TrendingUp className="w-4 h-4 text-emerald-400" />
-          <span className="text-xs text-slate-400">Score de conformité :</span>
-          <span className="text-sm font-bold text-emerald-400">
+        {/* Global conformity badge */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 self-start sm:self-auto">
+          <TrendingUp size={14} className="text-emerald-400" />
+          <span className="text-xs text-slate-400">Indice de conformité :</span>
+          <span className="text-xs font-mono font-bold text-emerald-400">
             {stats.avgScore}%
           </span>
         </div>
       </div>
 
-      {/* Quick KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-xl bg-slate-900/50 border border-slate-800/80 flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
-            <Layers className="w-4 h-4" />
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3 rounded-lg bg-slate-950/40 border border-slate-800/80">
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-1">
+            <Layers size={13} className="text-slate-400" />
+            <span>Réseaux</span>
           </div>
-          <div>
-            <p className="text-xs text-slate-400">Réseaux ciblés</p>
-            <p className="text-base font-bold text-slate-100">{stats.count}</p>
-          </div>
+          <p className="text-lg font-mono font-bold text-slate-100">{stats.count}</p>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/50 border border-slate-800/80 flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-pink-500/10 text-pink-400">
-            <Clock className="w-4 h-4" />
+        <div className="p-3 rounded-lg bg-slate-950/40 border border-slate-800/80">
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-1">
+            <Clock size={13} className="text-slate-400" />
+            <span>Temps de lecture</span>
           </div>
-          <div>
-            <p className="text-xs text-slate-400">Lecture moy.</p>
-            <p className="text-base font-bold text-slate-100">
-              ~{Math.round(estimateReadingTimeSeconds(platforms[0]?.[1]?.content || "") * 0.9)} sec
-            </p>
-          </div>
+          <p className="text-lg font-mono font-bold text-slate-100">
+            ~{Math.round(estimateReadingTimeSeconds(platforms[0]?.[1]?.content || "") * 0.9)}s
+          </p>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/50 border border-slate-800/80 flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400">
-            <Hash className="w-4 h-4" />
+        <div className="p-3 rounded-lg bg-slate-950/40 border border-slate-800/80">
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-1">
+            <Hash size={13} className="text-slate-400" />
+            <span>Hashtags</span>
           </div>
-          <div>
-            <p className="text-xs text-slate-400">Hashtags générés</p>
-            <p className="text-base font-bold text-slate-100">{stats.totalHashtags}</p>
-          </div>
+          <p className="text-lg font-mono font-bold text-slate-100">{stats.totalHashtags}</p>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/50 border border-slate-800/80 flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-violet-500/10 text-violet-400">
-            <Sparkles className="w-4 h-4" />
+        <div className="p-3 rounded-lg bg-slate-950/40 border border-slate-800/80">
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-1">
+            <BarChart3 size={13} className="text-slate-400" />
+            <span>Volume total</span>
           </div>
-          <div>
-            <p className="text-xs text-slate-400">Volume total</p>
-            <p className="text-base font-bold text-slate-100">
-              {formatNumber(stats.totalChars)} car.
-            </p>
-          </div>
+          <p className="text-lg font-mono font-bold text-slate-100">
+            {formatNumber(stats.totalChars)} <span className="text-xs font-normal text-slate-400">car.</span>
+          </p>
         </div>
       </div>
 
-      {/* D3 / Motion Animated SVG Bar Chart: Character distribution & Limits */}
-      <div className="space-y-3 pt-2">
+      {/* D3/SVG Quota bars */}
+      <div className="space-y-2 pt-1">
         <div className="flex justify-between items-center text-xs text-slate-400">
-          <span>Jauge de calibrage par plateforme (caractères vs quota optimal)</span>
-          <span className="text-[11px] text-indigo-400">Calcul dynamique SVG</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            Remplissage par rapport au quota maximal
+          </span>
+          <span className="text-xs font-mono text-slate-400">Calibrage dynamique</span>
         </div>
 
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {platforms.map(([id, post]) => {
             const meta = PLATFORMS_DATA[id] || {
               label: id,
@@ -159,46 +144,44 @@ export default function PlatformAnalyticsChart({ result }: Props) {
             };
             const len = post.content.length;
             const score = calculatePlatformScore(id, post.content, post.hashtags);
-            // Cap visual percentage for chart so huge limits (like 63k Facebook) don't distort the bar
             const visualMax = Math.min(meta.maxChars, 1500);
             const percent = Math.min(100, Math.max(8, Math.round((len / visualMax) * 100)));
 
             return (
               <div
                 key={id}
-                className="group p-2 rounded-xl bg-slate-900/30 hover:bg-slate-900/70 border border-slate-800/50 hover:border-slate-700/80 transition-all flex flex-col gap-1.5"
+                className="p-2 rounded-lg bg-slate-950/30 hover:bg-slate-900/40 border border-slate-800/60 transition-colors flex flex-col gap-1.5"
               >
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2">
-                    <PlatformIcon id={id} size={15} className="text-slate-300" />
+                    <PlatformIcon id={id} size={14} className="text-slate-400" />
                     <span className="font-medium text-slate-200 capitalize">
                       {meta.label}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 text-slate-400">
+                  <div className="flex items-center gap-3 text-slate-400 font-mono">
                     <span>
-                      <strong className="text-slate-200 font-medium">{len}</strong>
-                      <span className="text-slate-500 text-[11px]"> / {meta.maxChars} car.</span>
+                      <strong className="text-slate-200">{len}</strong>
+                      <span className="text-slate-500 text-[11px]"> / {meta.maxChars}</span>
                     </span>
                     <span
-                      className={`text-[11px] px-1.5 py-0.5 rounded ${
+                      className={`text-[10px] px-1.5 py-0.5 rounded ${
                         score >= 80
                           ? "bg-emerald-500/10 text-emerald-400"
                           : "bg-amber-500/10 text-amber-400"
                       }`}
                     >
-                      {score}% fit
+                      {score}%
                     </span>
                   </div>
                 </div>
 
-                {/* Animated Progress Bar */}
-                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden relative">
+                <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${percent}%` }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-pink-500"
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="h-full rounded-full bg-indigo-500"
                   />
                 </div>
               </div>
@@ -207,18 +190,17 @@ export default function PlatformAnalyticsChart({ result }: Props) {
         </div>
       </div>
 
-      {/* Hashtag Cloud */}
+      {/* Hashtag List */}
       {stats.sortedHashtags.length > 0 && (
         <div className="pt-2 border-t border-slate-800/80">
-          <p className="text-xs text-slate-400 mb-2.5 flex items-center gap-1.5">
-            <Hash className="w-3.5 h-3.5 text-indigo-400" />
-            Top Hashtags générés automatiquement :
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            Hashtags extraits :
           </p>
           <div className="flex flex-wrap gap-1.5">
             {stats.sortedHashtags.map(([tag, count]) => (
               <span
                 key={tag}
-                className="text-xs px-2.5 py-1 rounded-lg bg-slate-800/60 text-indigo-300 border border-slate-700/50 hover:border-indigo-500/40 transition-colors"
+                className="text-xs font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-800"
               >
                 {tag}
                 {count > 1 && (
@@ -229,7 +211,6 @@ export default function PlatformAnalyticsChart({ result }: Props) {
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
-

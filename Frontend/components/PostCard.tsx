@@ -14,7 +14,7 @@ import {
   Bookmark,
   Send,
   ThumbsUp,
-  Sparkles,
+  VerifiedCheck,
 } from "@/components/ui/Icons";
 import type { PlatformPost } from "@/types";
 import { PLATFORMS_DATA } from "@/types";
@@ -87,7 +87,7 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Post ${meta.label}`,
+          title: `Publication ${meta.label}`,
           text: fullText,
         });
       } catch {
@@ -111,62 +111,61 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.3 }}
-      className="glass-panel rounded-2xl overflow-hidden border border-slate-800 hover:border-slate-700/80 transition-all duration-300 flex flex-col justify-between shadow-lg shadow-black/20"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.2 }}
+      className="ui-card rounded-xl overflow-hidden flex flex-col justify-between"
     >
       {/* Top Header Card */}
-      <div className="p-4 bg-slate-900/80 border-b border-slate-800/80 flex items-center justify-between gap-2">
+      <div className="px-4 py-3 bg-slate-900/60 border-b border-slate-800/80 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-slate-800/90 border border-slate-700/70 flex items-center justify-center text-slate-200">
-            <PlatformIcon id={platform} size={18} />
+          <div className="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-slate-200">
+            <PlatformIcon id={platform} size={15} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-sm text-slate-100 capitalize">
+              <h3 className="font-semibold text-xs text-slate-100 capitalize tracking-tight">
                 {meta.label}
               </h3>
               <span
-                className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
+                className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
                   score >= 80
-                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
-                    : "bg-amber-500/10 text-amber-400 border border-amber-500/30"
+                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                    : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                 }`}
               >
-                {score}% fit
+                {score}% conformité
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">{meta.description}</p>
           </div>
         </div>
 
         {/* View mode toggle (Preview vs Edit) */}
-        <div className="flex items-center gap-1 bg-slate-950/70 p-1 rounded-lg border border-slate-800">
+        <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800">
           <button
             type="button"
             onClick={() => setMode("preview")}
-            className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
+            className={`p-1.5 rounded text-xs transition-colors cursor-pointer ${
               mode === "preview"
-                ? "bg-indigo-600 text-white shadow-sm"
+                ? "bg-slate-800 text-white"
                 : "text-slate-400 hover:text-slate-200"
             }`}
-            title="Aperçu Réaliste Réseau"
+            title="Aperçu visuel"
           >
-            <Eye className="w-3.5 h-3.5" />
+            <Eye size={13} />
           </button>
           <button
             type="button"
             onClick={() => setMode("edit")}
-            className={`p-1.5 rounded-md text-xs transition-colors cursor-pointer ${
+            className={`p-1.5 rounded text-xs transition-colors cursor-pointer ${
               mode === "edit"
-                ? "bg-indigo-600 text-white shadow-sm"
+                ? "bg-slate-800 text-white"
                 : "text-slate-400 hover:text-slate-200"
             }`}
-            title="Mode Édition"
+            title="Modifier le contenu"
           >
-            <Edit3 className="w-3.5 h-3.5" />
+            <Edit3 size={13} />
           </button>
         </div>
       </div>
@@ -180,115 +179,113 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="space-y-4"
+              className="space-y-3"
             >
               {/* Realistic Mockup Wrapper according to platform */}
               {platform === "x" && (
-                <div className="rounded-xl bg-black/70 p-3.5 border border-slate-800 text-slate-100 font-sans text-xs space-y-3">
+                <div className="rounded-lg bg-black/50 p-3.5 border border-slate-800/80 text-xs space-y-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center font-bold text-white text-xs">
+                    <div className="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center font-bold text-slate-300 text-xs">
                       GP
                     </div>
                     <div>
-                      <div className="flex items-center gap-1 font-bold">
-                        <span>GenPub Studio</span>
-                        <span className="text-sky-400 text-xs">☑</span>
-                        <span className="font-normal text-slate-500">
-                          @genpubres • 2m
+                      <div className="flex items-center gap-1 font-semibold text-slate-100">
+                        <span>Studio Publications</span>
+                        <VerifiedCheck size={13} />
+                        <span className="font-normal text-slate-500 text-[11px]">
+                          @genpubres · 2m
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="whitespace-pre-wrap leading-relaxed text-slate-200">
+                  <p className="whitespace-pre-wrap leading-relaxed text-slate-200 font-sans text-xs sm:text-[13px]">
                     {post.content}
                   </p>
 
                   {post.hashtags.length > 0 && (
-                    <p className="text-sky-400 font-medium">
+                    <p className="text-sky-400 font-medium text-xs">
                       {post.hashtags.join(" ")}
                     </p>
                   )}
 
-                  {/* X Fake Action Buttons */}
+                  {/* X Action Buttons */}
                   <div className="flex items-center justify-between text-slate-500 pt-2 border-t border-slate-900 text-xs">
-                    <span className="flex items-center gap-1 hover:text-sky-400">
-                      <MessageCircle className="w-3.5 h-3.5" /> 12
+                    <span className="flex items-center gap-1 hover:text-slate-300">
+                      <MessageCircle size={13} /> 12
                     </span>
-                    <span className="flex items-center gap-1 hover:text-emerald-400">
-                      <Repeat2 className="w-3.5 h-3.5" /> 34
+                    <span className="flex items-center gap-1 hover:text-slate-300">
+                      <Repeat2 size={13} /> 34
                     </span>
-                    <span className="flex items-center gap-1 hover:text-pink-400">
-                      <Heart className="w-3.5 h-3.5" /> 148
+                    <span className="flex items-center gap-1 hover:text-slate-300">
+                      <Heart size={13} /> 148
                     </span>
-                    <span className="flex items-center gap-1 hover:text-sky-400">
-                      <Bookmark className="w-3.5 h-3.5" /> 21
+                    <span className="flex items-center gap-1 hover:text-slate-300">
+                      <Bookmark size={13} /> 21
                     </span>
                   </div>
                 </div>
               )}
 
               {platform === "linkedin" && (
-                <div className="rounded-xl bg-slate-900/90 p-4 border border-slate-800 text-xs space-y-3">
+                <div className="rounded-lg bg-slate-950/40 p-4 border border-slate-800/80 text-xs space-y-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center font-bold text-white text-xs">
+                    <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center font-bold text-slate-300 text-xs">
                       AM
                     </div>
                     <div>
-                      <div className="font-bold text-slate-100 flex items-center gap-1">
+                      <div className="font-semibold text-slate-100 flex items-center gap-1">
                         <span>Alexandre Martin</span>
-                        <span className="text-slate-400 font-normal">• 1er</span>
+                        <span className="text-slate-500 font-normal text-[11px]">• 1er</span>
                       </div>
                       <p className="text-[11px] text-slate-400">
-                        Fondateur & Growth Lead · {getRelativeTime()}
+                        Direction éditoriale · {getRelativeTime()}
                       </p>
                     </div>
                   </div>
 
-                  <p className="whitespace-pre-wrap leading-relaxed text-slate-200">
+                  <p className="whitespace-pre-wrap leading-relaxed text-slate-200 text-xs sm:text-[13px]">
                     {post.content}
                   </p>
 
                   {post.hashtags.length > 0 && (
-                    <p className="text-blue-400 font-medium">
+                    <p className="text-blue-400 font-medium text-xs">
                       {post.hashtags.join(" ")}
                     </p>
                   )}
 
                   <div className="flex items-center justify-between text-slate-400 pt-2 border-t border-slate-800/80 text-xs">
-                    <span className="flex items-center gap-1.5 hover:text-blue-400">
-                      <ThumbsUp className="w-3.5 h-3.5 text-blue-400" /> J&apos;aime
+                    <span className="flex items-center gap-1.5 hover:text-slate-200">
+                      <ThumbsUp size={13} /> J&apos;aime
                     </span>
-                    <span className="flex items-center gap-1.5 hover:text-blue-400">
-                      <MessageCircle className="w-3.5 h-3.5" /> Commenter
+                    <span className="flex items-center gap-1.5 hover:text-slate-200">
+                      <MessageCircle size={13} /> Commenter
                     </span>
-                    <span className="flex items-center gap-1.5 hover:text-blue-400">
-                      <Repeat2 className="w-3.5 h-3.5" /> Diffuser
+                    <span className="flex items-center gap-1.5 hover:text-slate-200">
+                      <Repeat2 size={13} /> Partager
                     </span>
-                    <span className="flex items-center gap-1.5 hover:text-blue-400">
-                      <Send className="w-3.5 h-3.5" /> Envoyer
+                    <span className="flex items-center gap-1.5 hover:text-slate-200">
+                      <Send size={13} /> Envoyer
                     </span>
                   </div>
                 </div>
               )}
 
               {platform === "instagram" && (
-                <div className="rounded-xl bg-slate-950/90 p-3.5 border border-slate-800 text-xs space-y-3">
+                <div className="rounded-lg bg-black/40 p-3.5 border border-slate-800/80 text-xs space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full p-[2px] bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600">
-                        <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center font-bold text-[10px] text-white">
-                          GP
-                        </div>
+                      <div className="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center font-bold text-[10px] text-slate-300">
+                        GP
                       </div>
-                      <span className="font-semibold text-slate-200">
+                      <span className="font-semibold text-slate-200 text-xs">
                         genpubres.studio
                       </span>
                     </div>
-                    <span className="text-slate-500">•••</span>
+                    <span className="text-slate-600 font-mono text-xs">···</span>
                   </div>
 
-                  <p className="whitespace-pre-wrap leading-relaxed text-slate-200">
+                  <p className="whitespace-pre-wrap leading-relaxed text-slate-200 text-xs sm:text-[13px]">
                     <strong className="text-white mr-1.5">
                       genpubres.studio
                     </strong>
@@ -296,38 +293,38 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
                   </p>
 
                   {post.hashtags.length > 0 && (
-                    <p className="text-indigo-400">
+                    <p className="text-indigo-400 text-xs">
                       {post.hashtags.join(" ")}
                     </p>
                   )}
 
                   <div className="flex items-center justify-between text-slate-400 pt-2 border-t border-slate-900">
                     <div className="flex items-center gap-3">
-                      <Heart className="w-4 h-4 text-rose-500 fill-rose-500/20" />
-                      <MessageCircle className="w-4 h-4 hover:text-white" />
-                      <Send className="w-4 h-4 hover:text-white" />
+                      <Heart size={14} className="hover:text-rose-400" />
+                      <MessageCircle size={14} className="hover:text-white" />
+                      <Send size={14} className="hover:text-white" />
                     </div>
-                    <Bookmark className="w-4 h-4 hover:text-white" />
+                    <Bookmark size={14} className="hover:text-white" />
                   </div>
                 </div>
               )}
 
-              {/* Standard card for other platforms (Threads, TikTok, DevTo, Facebook, Snapchat, YouTube) */}
+              {/* Standard clean card for other platforms */}
               {!["x", "linkedin", "instagram"].includes(platform) && (
-                <div className="rounded-xl bg-slate-900/60 p-4 border border-slate-800/80 text-xs space-y-3">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-slate-200">
+                <div className="rounded-lg bg-slate-950/40 p-3.5 border border-slate-800/80 text-xs space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-slate-300 text-xs">
                       {meta.handleExample}
                     </span>
-                    <span className="text-slate-500">• Prêt à poster</span>
+                    <span className="text-[11px] text-slate-500 font-mono">Prêt à publier</span>
                   </div>
 
-                  <p className="whitespace-pre-wrap leading-relaxed text-slate-200">
+                  <p className="whitespace-pre-wrap leading-relaxed text-slate-200 text-xs sm:text-[13px]">
                     {post.content}
                   </p>
 
                   {post.hashtags.length > 0 && (
-                    <p className="text-indigo-400 font-medium">
+                    <p className="text-indigo-400 font-medium text-xs">
                       {post.hashtags.join(" ")}
                     </p>
                   )}
@@ -343,26 +340,26 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
               className="space-y-3"
             >
               <div>
-                <label className="text-[11px] font-medium text-slate-400 mb-1 block">
-                  Texte du post :
+                <label className="text-[11px] font-medium uppercase tracking-wider text-slate-400 mb-1 block">
+                  Texte de la publication :
                 </label>
                 <textarea
                   rows={6}
                   value={editableContent}
                   onChange={(e) => setEditableContent(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 text-slate-100 border border-slate-800 focus:border-indigo-500 focus:outline-none text-xs leading-relaxed"
+                  className="w-full p-3 rounded-lg bg-slate-950 text-slate-100 border border-slate-800 focus:border-indigo-500 focus:outline-none text-xs leading-relaxed"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-medium text-slate-400 mb-1 block">
+                <label className="text-[11px] font-medium uppercase tracking-wider text-slate-400 mb-1 block">
                   Hashtags (séparés par un espace) :
                 </label>
                 <input
                   type="text"
                   value={editableHashtags}
                   onChange={(e) => setEditableHashtags(e.target.value)}
-                  className="w-full p-2.5 rounded-lg bg-slate-950 text-indigo-300 border border-slate-800 focus:border-indigo-500 focus:outline-none text-xs"
+                  className="w-full p-2 rounded-lg bg-slate-950 text-indigo-300 border border-slate-800 focus:border-indigo-500 focus:outline-none text-xs"
                 />
               </div>
 
@@ -370,16 +367,16 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
                 <button
                   type="button"
                   onClick={() => setMode("preview")}
-                  className="text-xs px-3 py-1.5 rounded-lg text-slate-400 hover:text-white"
+                  className="text-xs px-2.5 py-1.5 rounded text-slate-400 hover:text-white"
                 >
                   Annuler
                 </button>
                 <button
                   type="button"
                   onClick={handleSaveEdit}
-                  className="text-xs px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium"
+                  className="text-xs px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-medium"
                 >
-                  Valider les modifications
+                  Enregistrer
                 </button>
               </div>
             </motion.div>
@@ -388,19 +385,19 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
       </div>
 
       {/* Footer Actions & Metadata */}
-      <div className="p-3 bg-slate-950/60 border-t border-slate-800/80 flex items-center justify-between gap-2 text-xs">
+      <div className="px-4 py-2.5 bg-slate-950/60 border-t border-slate-800/80 flex items-center justify-between gap-2 text-xs">
         {/* Character count & status */}
         <div className="flex items-center gap-2">
           <span
             className={`font-mono text-xs ${
-              isOverLimit ? "text-rose-400 font-bold" : "text-slate-400"
+              isOverLimit ? "text-rose-400 font-semibold" : "text-slate-400"
             }`}
           >
             {formatNumber(charCount)}
             <span className="text-slate-600"> / {meta.maxChars}</span>
           </span>
           {isOverLimit && (
-            <span className="text-[10px] text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded">
+            <span className="text-[10px] text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20">
               Dépassement
             </span>
           )}
@@ -412,10 +409,10 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
             <button
               type="button"
               onClick={handleCopyTags}
-              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-indigo-300 border border-slate-800 transition-colors cursor-pointer"
-              title="Copier uniquement les hashtags"
+              className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 transition-colors cursor-pointer text-xs font-mono"
+              title="Copier les tags"
             >
-              {copiedTags ? "Tags ✓" : "#Tags"}
+              {copiedTags ? "Copié" : "#tags"}
             </button>
           )}
 
@@ -423,30 +420,30 @@ export default function PostCard({ platform, post, onUpdatePost }: Props) {
             <button
               type="button"
               onClick={handleNativeShare}
-              className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition-colors cursor-pointer"
-              title="Partager directement"
+              className="p-1.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors cursor-pointer"
+              title="Partager"
             >
-              <Share2 className="w-3.5 h-3.5" />
+              <Share2 size={13} />
             </button>
           )}
 
           <button
             type="button"
             onClick={handleCopy}
-            className={`px-3 py-1.5 rounded-lg font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded font-medium flex items-center gap-1.5 transition-all cursor-pointer text-xs ${
               copied
-                ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
-                : "bg-indigo-600/90 hover:bg-indigo-500 text-white shadow-sm"
+                ? "bg-emerald-600 text-white"
+                : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
             }`}
           >
             {copied ? (
               <>
-                <Check className="w-3.5 h-3.5 stroke-[3]" />
-                <span>Copié !</span>
+                <Check size={13} className="stroke-[2.5]" />
+                <span>Copié</span>
               </>
             ) : (
               <>
-                <Copy className="w-3.5 h-3.5" />
+                <Copy size={13} />
                 <span>Copier</span>
               </>
             )}

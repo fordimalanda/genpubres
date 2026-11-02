@@ -15,17 +15,17 @@ export default function LanguageSelector({ value, onChange }: Props) {
       <div className="flex items-center justify-between">
         <label
           htmlFor="lang"
-          className="text-sm font-semibold text-slate-200 flex items-center gap-2"
+          className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2"
         >
-          <Globe className="w-4 h-4 text-indigo-400" />
-          <span>Langue de sortie & Adaptation culturelle</span>
+          <Globe size={14} className="text-slate-400" />
+          <span>Langue de sortie</span>
         </label>
         <span className="text-xs text-slate-400">
-          Traduction contextuelle native (non littérale)
+          Adaptation idiomatique selon les usages locaux
         </span>
       </div>
 
-      {/* Language Segmented Pills */}
+      {/* Language Segmented Control without emojis */}
       <div className="flex flex-wrap gap-2">
         {LANGUAGES.map((l) => {
           const isSelected = value === l.id;
@@ -34,13 +34,15 @@ export default function LanguageSelector({ value, onChange }: Props) {
               key={l.id}
               type="button"
               onClick={() => onChange(l.id)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-medium border flex items-center gap-2 transition-all duration-200 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium border flex items-center gap-2 transition-all duration-150 cursor-pointer ${
                 isSelected
-                  ? "bg-indigo-600/20 border-indigo-500 text-white shadow-[0_0_12px_-2px_rgba(99,102,241,0.3)] ring-1 ring-indigo-500/50"
-                  : "bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white"
+                  ? "bg-slate-800 border-slate-600 text-white shadow-sm ring-1 ring-slate-600/50"
+                  : "bg-slate-950/40 border-slate-800/80 text-slate-400 hover:border-slate-700 hover:text-slate-200"
               }`}
             >
-              <span className="text-base leading-none">{l.flag}</span>
+              <span className="font-mono font-bold text-[10px] px-1 py-0.2 rounded bg-slate-900 border border-slate-700/60 text-slate-300">
+                {l.code}
+              </span>
               <span>{l.label}</span>
             </button>
           );

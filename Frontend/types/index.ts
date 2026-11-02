@@ -34,7 +34,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [120, 260],
     color: "#000000",
     accentBg: "rgba(0, 0, 0, 0.15)",
-    description: "Format punchy, accroche percutante et thread si nécessaire.",
+    description: "Format concis avec accroche percutante et thread numéroté.",
     handleExample: "@genpubres_creator",
   },
   linkedin: {
@@ -45,7 +45,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [300, 1200],
     color: "#0A66C2",
     accentBg: "rgba(10, 102, 194, 0.15)",
-    description: "Storytelling B2B, aéré, accroche avant le 'Voir plus'.",
+    description: "Post professionnel, structure aérée et accroche optimisée.",
     handleExample: "Alexandre Martin · Fondateur",
   },
   facebook: {
@@ -56,7 +56,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [150, 450],
     color: "#1877F2",
     accentBg: "rgba(24, 119, 242, 0.15)",
-    description: "Ton communautaire, engageant, question ouverte en fin de post.",
+    description: "Ton conversationnel orienté échange communautaire.",
     handleExample: "GenPubRes Communauté",
   },
   instagram: {
@@ -67,7 +67,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [150, 600],
     color: "#E1306C",
     accentBg: "rgba(225, 48, 108, 0.15)",
-    description: "Légende soignée, émojis stratégiques et 3 à 5 hashtags clés.",
+    description: "Légende soignée et sélection ciblée de 3 à 5 hashtags.",
     handleExample: "genpubres.studio",
   },
   threads: {
@@ -78,7 +78,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [100, 450],
     color: "#101010",
     accentBg: "rgba(255, 255, 255, 0.1)",
-    description: "Authentique, conversationnel et spontané.",
+    description: "Style naturel, authentique et propice aux réponses.",
     handleExample: "@genpub_official",
   },
   tiktok: {
@@ -89,7 +89,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [80, 250],
     color: "#EE1D52",
     accentBg: "rgba(238, 29, 82, 0.15)",
-    description: "Script court, mots-clés de recherche SEO et tags tendance.",
+    description: "Script court pour vidéo, mots-clés de recherche et tags.",
     handleExample: "@tok_creators",
   },
   youtube: {
@@ -100,7 +100,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [200, 800],
     color: "#FF0000",
     accentBg: "rgba(255, 0, 0, 0.15)",
-    description: "Titre percutant (Short/Vidéo) + description optimisée.",
+    description: "Titre percutant et description structurée avec mots-clés.",
     handleExample: "GenPub Media Channel",
   },
   snapchat: {
@@ -111,7 +111,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [40, 180],
     color: "#FFFC00",
     accentBg: "rgba(255, 252, 0, 0.15)",
-    description: "Ultra concis, dynamique et orienté action.",
+    description: "Texte ultra court et dynamique.",
     handleExample: "genpub_snap",
   },
   devto: {
@@ -122,7 +122,7 @@ export const PLATFORMS_DATA: Record<string, PlatformMeta> = {
     optimalRange: [400, 2000],
     color: "#0A0A0A",
     accentBg: "rgba(10, 10, 10, 0.15)",
-    description: "Titre technique, résumé d'article et snippets de code/liens.",
+    description: "Titre technique et introduction claire pour développeurs.",
     handleExample: "dev_architect",
   },
 };
@@ -133,35 +133,55 @@ export const PLATFORMS = Object.values(PLATFORMS_DATA).map((p) => ({
 }));
 
 export const LANGUAGES = [
-  { id: "fr", label: "Français", flag: "🇫🇷" },
-  { id: "en", label: "English", flag: "🇬🇧" },
-  { id: "es", label: "Español", flag: "🇪🇸" },
-  { id: "pt", label: "Português", flag: "🇵🇹" },
-  { id: "de", label: "Deutsch", flag: "🇩🇪" },
-  { id: "it", label: "Italiano", flag: "🇮🇹" },
+  { id: "fr", label: "Français", code: "FR" },
+  { id: "en", label: "English", code: "EN" },
+  { id: "es", label: "Español", code: "ES" },
+  { id: "pt", label: "Português", code: "PT" },
+  { id: "de", label: "Deutsch", code: "DE" },
+  { id: "it", label: "Italiano", code: "IT" },
 ] as const;
 
 export const TONE_PRESETS = [
-  { id: "viral", label: "Viral & Accrocheur", icon: "🔥", promptSnippet: "avec un ton viral, intrigant et un fort appel à l'action" },
-  { id: "pro", label: "Professionnel & B2B", icon: "💼", promptSnippet: "avec un ton professionnel, structuré, orienté valeur et expertise" },
-  { id: "story", label: "Storytelling Émotionnel", icon: "✨", promptSnippet: "sous forme de récit captivant, authentique et humain" },
-  { id: "direct", label: "Minimaliste & Direct", icon: "⚡", promptSnippet: "avec un style épuré, direct au but, concis et efficace" },
+  {
+    id: "viral",
+    label: "Engageant & Percutant",
+    iconName: "flame",
+    promptSnippet: "avec un ton dynamique, engageant et un appel à l'action clair",
+  },
+  {
+    id: "pro",
+    label: "Professionnel & B2B",
+    iconName: "briefcase",
+    promptSnippet: "avec un ton sobre, professionnel, structuré et orienté expertise",
+  },
+  {
+    id: "story",
+    label: "Narratif & Expérientiel",
+    iconName: "book",
+    promptSnippet: "sous forme de récit structuré, captivant et authentique",
+  },
+  {
+    id: "direct",
+    label: "Concis & Direct",
+    iconName: "zap",
+    promptSnippet: "avec un style épuré, factuel, concis et sans fioritures",
+  },
 ] as const;
 
 export const SAMPLE_TEMPLATES = [
   {
-    title: "🚀 Lancement de Produit",
-    preview: "Après 6 mois de dev secret, on lance enfin notre nouvelle solution...",
-    content: "Après 6 mois de développement intensif en sous-marin, nous dévoilons officiellement GenPubRes ! Une solution propulsée par l'intelligence artificielle qui transforme n'importe quel texte brut en publications sur-mesure pour 9 réseaux sociaux en un seul clic. Fini la corvée de réécriture manuelle pour LinkedIn, X, Instagram ou TikTok. Essayez gratuitement dès aujourd'hui et boostez votre portée organique !",
+    title: "Lancement de produit",
+    preview: "Après plusieurs mois de conception, découvrez notre nouveau studio de publication...",
+    content: "Après plusieurs mois de développement, nous présentons officiellement GenPubRes. Une solution conçue pour transformer n'importe quel texte source en publications calibrées pour 9 réseaux sociaux en un seul clic. Fini la réécriture manuelle répétitive pour LinkedIn, X, Instagram ou Threads. Découvrez l'outil et gagnez un temps précieux dans votre communication.",
   },
   {
-    title: "💡 3 Règles d'Or Tech",
-    preview: "Les 3 erreurs que 90% des créateurs font sur leurs réseaux...",
-    content: "Voici les 3 erreurs critiques qui ruinent votre visibilité sur les réseaux :\n1. Copier-coller le même message mot pour mot partout (l'algorithme et l'audience détestent ça).\n2. Oublier les premières secondes ou la première ligne (l'attention moyenne est de 2,7 secondes).\n3. Négliger le format propre à chaque canal : un post LinkedIn ne se rédige pas comme un tweet ou une légende Instagram.\nOptimisez chaque canal pour son format natif !",
+    title: "Guide de bonnes pratiques",
+    preview: "3 principes essentiels pour maintenir une communication cohérente...",
+    content: "Trois principes essentiels pour maximiser l'impact de vos publications :\n1. Ne jamais dupliquer le même message textuellement (chaque canal requiert son rythme et son format propre).\n2. Soigner les 150 premiers caractères (la décision de poursuivre la lecture se prend instantanément).\n3. Respecter les formats natifs de chaque réseau plutôt que d'imposer un gabarit unique.",
   },
   {
-    title: "📈 Retour d'expérience",
-    preview: "Comment nous avons multiplié par 5 notre engagement sans budget ads...",
-    content: "Comment nous avons multiplié notre engagement par 5 sans dépenser 1 seul euro en publicité : en adaptant systématiquement le ton à chaque plateforme. Sur LinkedIn : retour d'expérience chiffres à l'appui. Sur X : thread ultra condensé. Sur Instagram : citation visuelle percutante. La cohérence du message + la spécificité du format = le combo gagnant en 2026.",
+    title: "Étude de cas & résultats",
+    preview: "Comment adapter votre contenu démultiplie la portée organique...",
+    content: "Comment optimiser sa visibilité sans multiplier les efforts : en déclinant chaque prise de parole selon l'audience de destination. Sur LinkedIn : un retour d'expérience structuré et orienté métier. Sur X : une synthèse directe et incisive. Sur Instagram : un angle visuel et mémorable. La cohérence du fond alliée à la rigueur de la forme.",
   },
 ];

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, AlertCircle, ArrowDown, Play } from "@/components/ui/Icons";
+import { AlertCircle, ArrowDown, Play, Sparkles } from "@/components/ui/Icons";
 import Header from "@/components/Header";
 import ContentForm from "@/components/ContentForm";
 import PlatformSelector from "@/components/PlatformSelector";
@@ -14,38 +14,38 @@ import { declineContent } from "@/lib/api";
 import type { DeclineResult } from "@/types";
 import { TONE_PRESETS } from "@/types";
 
-// Demonstration mock data in case backend is offline or for instant preview
+// Clean demonstration mock data in case backend is offline
 const DEMO_RESULT: DeclineResult = {
   platforms: {
     x: {
       content:
-        "🚀 Nous venons de lancer GenPubRes !\n\nUn seul texte source → 9 déclinaisons taillées au millimètre pour chaque algo de réseau social.\n\nFini de passer 2h à réécrire la même annonce pour LinkedIn, X et Instagram. L'IA optimise le ton, l'accroche et les hashtags.",
-      hashtags: ["#SocialMedia", "#BuildInPublic", "#IA"],
+        "Nous lançons GenPubRes : un texte source unique, 9 déclinaisons taillées au millimètre pour chaque canal.\n\nFini de passer 2h à réécrire la même annonce pour LinkedIn, X et Instagram. L'outil calibre le ton, l'accroche et les hashtags natifs.",
+      hashtags: ["#SocialMedia", "#Productivity", "#ContentOps"],
     },
     linkedin: {
       content:
-        "Comment multiplier par 5 son impact sur les réseaux sans recruter une agence ? 📈\n\nAprès 6 mois de tests intensifs, un constat s'impose : le copié-collé d'un même message détruit l'engagement organique.\n\nChaque réseau a ses propres codes :\n• Sur X : concis, percutant, immédiat.\n• Sur LinkedIn : du storytelling, du contexte métier, de la valeur actionnable.\n• Sur Instagram : visuel, esthétique, émotionnel.\n\nC'est précisément la promesse de GenPubRes : prenez une idée brute, et laissez l'IA générer des publications calibrées au mot près pour votre audience cible.\n\nQuel canal vous apporte le plus de ROI aujourd'hui ? Échangeons en commentaire !",
-      hashtags: ["#Productivity", "#GrowthHacking", "#MarketingDigital", "#Innovation"],
+        "Comment multiplier par 5 son impact sur les réseaux sans dupliquer ses efforts ?\n\nAprès plusieurs mois de tests, un constat s'impose : le copié-collé d'un même message nuit directement à l'engagement organique.\n\nChaque plateforme dispose de ses propres dynamiques :\n• Sur X : concis, direct et immédiat.\n• Sur LinkedIn : du contexte métier, une réflexion structurée et de la valeur actionnable.\n• Sur Instagram : visuel, soigné et émotionnel.\n\nC'est la mission de GenPubRes : prenez une idée brute et obtenez des publications adaptées à chaque format.",
+      hashtags: ["#Productivity", "#Communication", "#MarketingDigital", "#Innovation"],
     },
     instagram: {
       content:
-        "Le secret d'une présence omnicanale réussie en 2026 n'est pas de publier plus... mais de publier MIEUX. ✨\n\nArrêtez de gaspiller des heures à reformuler vos contenus. Adoptez l'approche 'Créer une fois, diffuser partout'.\n\n👉 Enregistre ce post pour tes prochaines sessions de création de contenu !",
-      hashtags: ["#ContentCreator", "#ProductivityHacks", "#InstaTips", "#SocialMediaTips"],
+        "Le secret d'une présence omnicanale réussie n'est pas de publier plus... mais de publier plus juste.\n\nAdaptez toujours le message à l'audience réceptrice plutôt que de forcer un format générique.",
+      hashtags: ["#ContentStrategy", "#ProductivityHacks", "#SocialMediaTips"],
     },
     threads: {
       content:
-        "Honnêtement, le plus dur dans la création de contenu n'est pas d'avoir des idées, c'est de les décliner sur tous les formats sans y passer ses nuits. Qui d'autre ressent cette fatigue du multi-plateforme ?",
-      hashtags: ["#Threads", "#Creators"],
+        "Le plus difficile dans la communication n'est pas de trouver l'idée, mais de la reformuler sans cesse pour chaque réseau. Comment gérez-vous cette charge au quotidien ?",
+      hashtags: ["#Discussion", "#Creators"],
     },
     tiktok: {
       content:
-        "POV : Tu viens de découvrir comment générer tes posts pour 9 réseaux en 1 clic grâce à l'IA 🤯 Plus d'excuse pour ne pas être régulier !",
-      hashtags: ["#AIHacks", "#TechTok", "#AstuceProductivité"],
+        "Comment décliner ses idées en publications pour 9 réseaux sociaux en quelques clics sans perdre en pertinence.",
+      hashtags: ["#AstuceProductivité", "#ContentStrategy"],
     },
     devto: {
       content:
-        "Building GenPubRes: How We Architected an AI-Powered Social Multi-Publisher with Next.js, C# and DeepSeek.\n\nIn this article, we break down how to handle context-aware text transformations, rate limits, and ultra-fast UI updates.",
-      hashtags: ["#webdev", "#nextjs", "#ai", "#dotnet"],
+        "Architecting GenPubRes: Multi-Channel Content Adaptation with Next.js, C# and DeepSeek.\n\nIn this overview, we cover API rate-limiting, contextual prompt engineering, and clean UI architecture.",
+      hashtags: ["#webdev", "#nextjs", "#dotnet", "#architecture"],
     },
   },
 };
@@ -67,7 +67,7 @@ export default function Home() {
   const canSubmit =
     content.trim().length > 0 && platforms.length > 0 && !loading;
 
-  // Keyboard shortcut: Cmd/Ctrl + Enter to trigger generate
+  // Keyboard shortcut: Cmd/Ctrl + Enter
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
@@ -86,7 +86,6 @@ export default function Home() {
     setError(null);
     setResult(null);
 
-    // Optional tone augmentation in the content payload
     const toneInfo = TONE_PRESETS.find((t) => t.id === tone);
     const enrichedContent = toneInfo
       ? `${content}\n\n[Instruction de style : Rédiger ${toneInfo.promptSnippet}]`
@@ -115,28 +114,22 @@ export default function Home() {
     setResult(DEMO_RESULT);
     if (!content) {
       setContent(
-        "Après 6 mois de développement intensif en sous-marin, nous dévoilons officiellement GenPubRes ! Une solution propulsée par l'intelligence artificielle qui transforme n'importe quel texte brut en publications sur-mesure pour 9 réseaux sociaux en un seul clic."
+        "Après plusieurs mois de développement, nous présentons officiellement GenPubRes. Une solution conçue pour transformer n'importe quel texte source en publications calibrées pour 9 réseaux sociaux en un seul clic."
       );
     }
   };
 
   return (
-    <main className="relative min-h-screen pb-24 text-slate-100 selection:bg-indigo-500/30 selection:text-indigo-200">
-      {/* Background Animated Beams and Glow */}
+    <main className="relative min-h-screen pb-20 text-slate-100 selection:bg-indigo-500/20 selection:text-indigo-200">
+      {/* Background */}
       <BackgroundBeams />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        {/* Header Hero Section */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        {/* Header */}
         <Header onSelectTemplate={(tmpl) => setContent(tmpl)} />
 
-        {/* Studio Form Card */}
-        <motion.section
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="glass-panel-glow rounded-3xl p-6 sm:p-8 space-y-8 relative overflow-hidden"
-        >
-          {/* Form Controls */}
+        {/* Input Studio Card */}
+        <section className="ui-card rounded-2xl p-6 sm:p-7 space-y-6">
           <ContentForm
             value={content}
             onChange={setContent}
@@ -156,51 +149,46 @@ export default function Home() {
           <div className="pt-2 flex flex-col sm:flex-row items-center gap-4">
             <Button
               type="button"
-              variant="gradient"
+              variant="primary"
               size="lg"
               loading={loading}
               disabled={!canSubmit}
               onClick={submit}
-              className="w-full sm:flex-1 py-4 text-base"
+              className="w-full sm:flex-1 py-3"
             >
-              <Sparkles className="w-5 h-5" />
+              <Sparkles size={16} />
               <span>
                 {loading
-                  ? "Génération & adaptation IA en cours…"
-                  : `Générer pour ${platforms.length} plateforme${
-                      platforms.length > 1 ? "s" : ""
+                  ? "Génération en cours…"
+                  : `Générer pour ${platforms.length} réseau${
+                      platforms.length > 1 ? "x" : ""
                     }`}
               </span>
             </Button>
 
             <span className="hidden sm:inline-block text-xs text-slate-500 font-mono">
-              <kbd className="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400">
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
                 Ctrl
               </kbd>{" "}
               +{" "}
-              <kbd className="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400">
-                Enter
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
+                Entrée
               </kbd>
             </span>
           </div>
 
           {/* Error Banner with Graceful Demo Fallback */}
           {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-200 text-sm space-y-3"
-            >
+            <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-700/80 text-slate-300 text-xs space-y-3">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                <AlertCircle size={16} className="text-amber-400 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <p className="font-semibold text-rose-100">
-                    Impossible de contacter l&apos;API Backend
+                  <p className="font-semibold text-slate-200">
+                    Serveur local non joignable
                   </p>
-                  <p className="text-xs text-rose-300/90">{error}</p>
-                  <p className="text-xs text-slate-400 pt-1">
-                    (Vérifiez que votre backend C# .NET tourne sur{" "}
-                    <code>http://localhost:5151</code> avec votre clé DeepSeek).
+                  <p className="text-slate-400 font-mono text-[11px]">{error}</p>
+                  <p className="text-slate-400">
+                    Assurez-vous que l'API .NET tourne sur <code>http://localhost:5151</code> avec une clé valide.
                   </p>
                 </div>
               </div>
@@ -209,40 +197,31 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={handleUseDemo}
-                  className="text-xs px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium flex items-center gap-1.5 transition-colors cursor-pointer border border-slate-700"
                 >
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Charger les résultats de démonstration (Mode Démo)</span>
+                  <Play size={12} className="fill-current" />
+                  <span>Afficher l'exemple de démonstration</span>
                 </button>
               </div>
-            </motion.div>
+            </div>
           )}
-        </motion.section>
+        </section>
 
         {/* Results Section */}
         <AnimatePresence>
           {result && (
             <motion.section
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.5 }}
+              exit={{ opacity: 0, y: 12 }}
+              transition={{ duration: 0.3 }}
               className="space-y-4 pt-4"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
-                    <ArrowDown className="w-4 h-4 animate-bounce" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-slate-100">
-                      Publications Générées
-                    </h2>
-                    <p className="text-xs text-slate-400">
-                      Prêtes à être copiées, modifiées ou planifiées
-                    </p>
-                  </div>
-                </div>
+              <div className="flex items-center gap-2 border-b border-slate-800/80 pb-3">
+                <ArrowDown size={15} className="text-slate-400" />
+                <h2 className="text-lg font-semibold text-white tracking-tight">
+                  Publications prêtes à diffuser
+                </h2>
               </div>
 
               <ResultGrid result={result} />

@@ -2,17 +2,15 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import autoAnimate from "@formkit/auto-animate";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import {
   Copy,
   Check,
   Download,
-  Sparkles,
   Filter,
   FileDown,
   Layers,
 } from "@/components/ui/Icons";
-import confetti from "canvas-confetti";
 import type { DeclineResult, PlatformPost } from "@/types";
 import { PLATFORMS_DATA } from "@/types";
 import PostCard from "./PostCard";
@@ -30,17 +28,6 @@ export default function ResultGrid({ result }: Props) {
 
   useEffect(() => {
     setLocalResult(result);
-    // Trigger confetti celebration on result generation
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.65 },
-        colors: ["#6366f1", "#8b5cf6", "#ec4899", "#10b981", "#38bdf8"],
-      });
-    } catch {
-      // Ignore if confetti fails
-    }
   }, [result]);
 
   useEffect(() => {
@@ -71,18 +58,13 @@ export default function ResultGrid({ result }: Props) {
       .map(([platform, post]) => {
         const meta = PLATFORMS_DATA[platform]?.label || platform;
         const tags = post.hashtags.length ? `\n\n${post.hashtags.join(" ")}` : "";
-        return `════════════════════════════════════\n📢 ${meta.toUpperCase()}\n════════════════════════════════════\n${post.content}${tags}\n`;
+        return `----------------------------------------\n[${meta.toUpperCase()}]\n----------------------------------------\n${post.content}${tags}\n`;
       })
       .join("\n\n");
 
     try {
       await navigator.clipboard.writeText(formatted);
       setCopiedAll(true);
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.7 },
-      });
       setTimeout(() => setCopiedAll(false), 2500);
     } catch {
       // Ignore
@@ -95,7 +77,7 @@ export default function ResultGrid({ result }: Props) {
       encodeURIComponent(JSON.stringify(localResult, null, 2));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `genpubres-posts-${Date.now()}.json`);
+    downloadAnchor.setAttribute("download", `genpubres-${Date.now()}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -105,15 +87,15 @@ export default function ResultGrid({ result }: Props) {
     const textContent = entries
       .map(([platform, post]) => {
         const meta = PLATFORMS_DATA[platform]?.label || platform;
-        return `### ${meta} ###\n\n${post.content}\n\n${post.hashtags.join(" ")}\n\n`;
+        return `=== ${meta} ===\n\n${post.content}\n\n${post.hashtags.join(" ")}\n\n`;
       })
-      .join("--------------------------------------\n\n");
+      .join("----------------------------------------\n\n");
 
     const dataStr =
       "data:text/plain;charset=utf-8," + encodeURIComponent(textContent);
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `genpubres-posts-${Date.now()}.txt`);
+    downloadAnchor.setAttribute("download", `genpubres-${Date.now()}.txt`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -121,9 +103,9 @@ export default function ResultGrid({ result }: Props) {
 
   if (entries.length === 0) {
     return (
-      <div className="glass-panel rounded-2xl p-8 text-center text-slate-400 border border-slate-800">
-        <Layers className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-        <p>Aucun post généré pour le moment.</p>
+      <div className="ui-card rounded-xl p-8 text-center text-slate-400">
+        <Layers size={24} className="text-slate-500 mx-auto mb-2" />
+        <p className="text-sm">Aucune publication à afficher.</p>
       </div>
     );
   }
@@ -131,8 +113,8 @@ export default function ResultGrid({ result }: Props) {
   const categories = [
     { id: "all", label: `Tous (${entries.length})` },
     { id: "microblog", label: "Microblog (X, Threads)" },
-    { id: "pro", label: "Pro (LinkedIn, FB)" },
-    { id: "visual", label: "Visuel (Insta, Snap)" },
+    { id: "pro", label: "Pro (LinkedIn, Facebook)" },
+    { id: "visual", label: "Visuel (Instagram, Snapchat)" },
     { id: "video", label: "Vidéo (TikTok, YouTube)" },
     { id: "tech", label: "Tech (Dev.to)" },
   ].filter((c) => {
@@ -147,22 +129,22 @@ export default function ResultGrid({ result }: Props) {
       {/* Analytics & Metrics Visualization */}
       <PlatformAnalyticsChart result={localResult} />
 
-      {/* Action Bar & Category Filters */}
-      <div className="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-        {/* Category Pills */}
+      {/* Filter and Export Toolbar */}
+      <div className="ui-card rounded-xl p-3 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        {/* Category Filter Pills */}
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-xs text-slate-400 mr-1 flex items-center gap-1">
-            <Filter className="w-3.5 h-3.5 text-indigo-400" /> Filtre :
+            <Filter size={13} className="text-slate-400" /> Filtrer :
           </span>
           {categories.map((c) => (
             <button
               key={c.id}
               type="button"
               onClick={() => setFilterCategory(c.id)}
-              className={`text-xs px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${
+              className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors cursor-pointer ${
                 filterCategory === c.id
-                  ? "bg-indigo-600 text-white border-indigo-500 shadow-sm"
-                  : "bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700"
+                  ? "bg-slate-800 text-white border-slate-600 shadow-sm"
+                  : "bg-slate-950/40 text-slate-400 border-slate-800/80 hover:text-slate-200 hover:border-slate-700"
               }`}
             >
               {c.label}
@@ -175,41 +157,41 @@ export default function ResultGrid({ result }: Props) {
           <button
             type="button"
             onClick={handleExportTXT}
-            className="text-xs px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="Télécharger en document TXT"
+            className="text-xs px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
+            title="Exporter en fichier texte brut"
           >
-            <Download className="w-3.5 h-3.5 text-indigo-400" />
+            <Download size={13} className="text-slate-400" />
             <span>TXT</span>
           </button>
 
           <button
             type="button"
             onClick={handleExportJSON}
-            className="text-xs px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="Exporter en JSON structuré"
+            className="text-xs px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
+            title="Exporter en JSON"
           >
-            <FileDown className="w-3.5 h-3.5 text-indigo-400" />
+            <FileDown size={13} className="text-slate-400" />
             <span>JSON</span>
           </button>
 
           <button
             type="button"
             onClick={handleCopyAll}
-            className={`text-xs px-4 py-2 rounded-xl font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`text-xs px-3.5 py-1.5 rounded-lg font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
               copiedAll
-                ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
-                : "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40"
+                ? "bg-emerald-600 text-white"
+                : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm"
             }`}
           >
             {copiedAll ? (
               <>
-                <Check className="w-4 h-4 stroke-[3]" />
-                <span>Tous les posts copiés !</span>
+                <Check size={13} className="stroke-[2.5]" />
+                <span>Copié dans le presse-papiers</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4" />
-                <span>Tout copier (Package complet)</span>
+                <Copy size={13} />
+                <span>Tout copier</span>
               </>
             )}
           </button>
@@ -219,7 +201,7 @@ export default function ResultGrid({ result }: Props) {
       {/* Cards Grid */}
       <div
         ref={gridRef}
-        className="grid gap-6 md:grid-cols-2 lg:grid-cols-2"
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-2"
       >
         <AnimatePresence>
           {filteredEntries.map(([platform, post]) => (
