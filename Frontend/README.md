@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GenPubRes — Interface Utilisateur (Frontend)
 
-## Getting Started
+Ce sous-répertoire contient l'application cliente développée avec Next.js 16 (App Router) et React 19.
 
-First, run the development server:
+---
+
+## Caractéristiques Techniques
+
+- **Next.js 16 & Turbopack** : Architecture de composants serveur et client optimisée pour des temps de compilation rapides.
+- **Tailwind CSS v4** : Système de conception épuré respectant les standards UI/UX actuels (typographie soignée, palette sombre neutre, contrastes calibrés).
+- **Framer Motion & AutoAnimate** : Transitions fluides pour le réagencement des plateformes et le basculement entre les vues Aperçu et Édition.
+- **Visualisations SVG natives** : Suivi des volumes de caractères et des quotas de chaque réseau social via des échelles calculées dynamiquement.
+- **Icônes vectorielles SVG intégrées** : Ensemble d'icônes légères sans dépendances tierces superflues.
+
+---
+
+## Démarrage Rapide
+
+### Installation des dépendances
+
+```bash
+npm install
+```
+
+### Lancement du serveur de développement
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L'application est accessible sur `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Variables d'environnement
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Créer un fichier `.env.local` à la racine de `Frontend/` si nécessaire :
 
-## Learn More
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5151
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure des Fichiers
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `app/` : Routes Next.js, mise en page principale (`layout.tsx`), page d'accueil (`page.tsx`) et styles (`globals.css`).
+- `components/` :
+  - `Header.tsx` : En-tête sobre avec statut de service et modèles pré-remplis.
+  - `ContentForm.tsx` : Saisie du contenu source, sélection de style et compteurs.
+  - `PlatformSelector.tsx` : Sélection unitaire et packs groupés par catégorie.
+  - `LanguageSelector.tsx` : Choix de la langue de déclinaison avec badges ISO.
+  - `PostCard.tsx` : Carte de publication avec aperçu réaliste par réseau et mode édition.
+  - `ResultGrid.tsx` : Grille filtrable et barre d'actions d'export groupé.
+  - `PlatformAnalyticsChart.tsx` : Graphique d'analyse et jauges de remplissage des quotas.
+  - `ui/` : Primitives d'interface réutilisables (Boutons, Badges, Icônes, Arrière-plan).
+- `lib/` :
+  - `api.ts` : Fonctions d'appel HTTP vers le backend .NET.
+  - `utils.ts` : Utilitaires de classes conditionnelles (`cn`), estimations et formatage Day.js.
+- `types/` : Types TypeScript et métadonnées exhaustives des réseaux sociaux ciblés.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts Disponibles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` : Démarre le serveur local de développement.
+- `npm run build` : Génère le build de production optimisé.
+- `npm run start` : Démarre l'application compilée en mode production.
+- `npm run lint` : Exécute l'analyseur de code ESLint.
+- `npx tsc --noEmit` : Vérifie la validité des types TypeScript.
