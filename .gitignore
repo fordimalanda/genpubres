@@ -1,0 +1,13 @@
+# .NET
+Backend/bin/
+Backend/obj/
+Backend/appsettings.Development.json
+
+# Next.js
+Frontend/node_modules/
+Frontend/.next/
+Frontend/.env.local
+
+# Divers
+.DS_Store
+*.log
